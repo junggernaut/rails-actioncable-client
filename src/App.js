@@ -8,6 +8,7 @@ import Input from './input'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
   const handleLoginSubmit = (username) => {
     consumer.subscriptions.create({ channel: "ChatChannel", user: username}, {
@@ -22,6 +23,7 @@ const App = () => {
         console.log(data)
       }
     })
+
   }
   const onSendMessage = (msgText) => {
     const msg = {
