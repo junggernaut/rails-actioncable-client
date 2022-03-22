@@ -1,25 +1,55 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { randomColor } from './utils/common';
 import './App.css';
+import consumer from './consumer'
+import LoginForm from './LoginForm'
+import Messages from './Messages'
+import Input from './input'
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState(null)
+  const [messages, setMessages] = useState([])
+  const handleLoginSubmit = (username) => {
+    consumer.subscriptions.create({ channel: "ChatChannel", user: username}, {
+      connected() {
+        console.log("connected!")
+        setUser({username: username, color: randomColor()})
+      },
+      disconnected() {
+        console.log("disconnected!")
+      },
+      received(data){
+        console.log(data)
+      }
+    })
+  }
+  const onSendMessage = (msgText) => {
+    const msg = {
+      author: user.username,
+      message: msgText
+    }
+    console.log(msgText)
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {!!user ?
+        (
+          <>
+          
+            <Messages
+              messages={messages}
+              currentUser={user}
+            />
+            <Input onSendMessage={onSendMessage} />
+          </>
+        ) :
+        <LoginForm onSubmit={handleLoginSubmit} />
+      }
     </div>
   );
 }
+
 
 export default App;
