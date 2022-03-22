@@ -6,12 +6,13 @@ import LoginForm from './LoginForm'
 import Messages from './Messages'
 import Input from './input'
 
+
 const App = () => {
   const [user, setUser] = useState(null)
   const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
   const handleLoginSubmit = (username) => {
-    consumer.subscriptions.create({ channel: "ChatChannel", user: username}, {
+    const create = consumer.subscriptions.create({ channel: "ChatChannel", user: username}, {
       connected() {
         console.log("connected!")
         setUser({username: username, color: randomColor()})
@@ -20,19 +21,20 @@ const App = () => {
         console.log("disconnected!")
       },
       received(data){
-        console.log(data)
+        console.log("recieve :", data)
       }
     })
-
+    setChannel(create)
   }
+
   const onSendMessage = (msgText) => {
-    const msg = {
-      author: user.username,
-      message: msgText
-    }
-    console.log(msgText)
+    // const msg = {
+    //   author: user.username,
+    //   message: msgText
+    // }
+    channel.send({ sent_by: "Paul", body: msgText })
   }
-
+  console.log("hello")
 
   return (
     <div className="App">
