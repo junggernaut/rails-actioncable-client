@@ -18,7 +18,7 @@ const Messages = ({ messages, currentUser }) => {
                         {author}
                     </div>
                     <div className="text">{message}</div>
-                    <div> {timestamp}</div>
+                    <div> {Date(timestamp)}</div>
                 </div>
                 
             </li>
