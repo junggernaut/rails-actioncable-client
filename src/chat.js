@@ -10,6 +10,8 @@ export default class ChatChannel extends Channel {
   }
 
   receive(message) {
+    
+    console.log(message)
     if (message.type === 'typing') {
       // Emit custom event when message type is 'typing'
       return this.emit('typing', message)
