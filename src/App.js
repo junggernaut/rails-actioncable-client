@@ -7,6 +7,7 @@ import ChatChannel  from './chat'
 import LoginForm from './LoginForm'
 import Messages from './Messages'
 import Input from './input'
+import chatAPI from './api';
 
 
 const App = () => {
@@ -33,17 +34,18 @@ const App = () => {
     const subscription = await cable.subscribeTo('ChatChannel', { username: username })
     setChannel(subscription)
     setUser({username: username, color: randomColor()})
+
     subscription.on('message', msg => {
+      console.log("on", msg)
       onMessageReceived(msg)
     })
-    // Handle custom typing messages
-    subscription.on('custom', msg => console.log("11"))
-
     // Or subscription close events
-    subscription.on('close', () => console.log("22"))
+    subscription.on('close', () => console.log('Disconnected from chat'))
 
     // Or temporary disconnect
-    subscription.on('disconnect', () => console.log("33"))
+    subscription.on('disconnect', () => console.log('No chat connection'))
+
+
 
   }
 
@@ -52,15 +54,14 @@ const App = () => {
       author: user.username,
       message: msgText,
       timestamp: new Date().getTime(),
+      buddy: "sehan"
     }
     // channel.send({ sent_by: "Paul", body: msgText })
     // const _ = await channel.speak(msg)
-    const _1 = await channel.perform('speak', { msg: msg })
-    const _2 = await channel.perform('custom', { msg: msg })
+    const _ = await channel.perform('speak', { msg: msg })
   }
 
   const onMessageReceived = (msg) => {
-    console.log('New Message Received!!', msg);
     setMessages((m) => [...m, msg]);
   }
 

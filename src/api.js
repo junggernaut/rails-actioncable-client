@@ -7,7 +7,7 @@ const api = axios.create({
 
 const chatAPI ={
 	getRooms: (username) => {
-		console.log(`get rooms of ${walletId}`)
+		console.log(`get rooms of ${username}`)
 		return api.get('room/all', {
 			params: {
 				username: username
@@ -16,14 +16,16 @@ const chatAPI ={
 	},
 	createPrivateRoom: (roomname, buddy) => {
 		return api.post('room/createPrivate', {
-			username: username,
+			username: roomname,
 			buddy: buddy, 
 		})
 	},
 	createBuubleRoom: (roomname, participants) => {
 		return api.post('room/createBubble', {
-			username: username,
+			username: roomname,
 			participants: participants,
 		})
 	}
 }
+
+export default chatAPI;
